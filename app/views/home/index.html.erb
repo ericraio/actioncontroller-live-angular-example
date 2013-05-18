@@ -1,0 +1,8 @@
+<h1>Review my games bitch</h1>
+
+<%= simple_form_for(:user, as: :user, url: user_registration_path, method: :post, html: {class: 'form-vertical' }) do |f| %>
+  <%= f.input :username, :autofocus => true, :require => true %>
+  <%= f.input :email, :required => true %>
+  <%= f.input :password, :required => true %>
+  <%= f.button :submit, 'Sign up', :class => 'btn-primary' %>
+<% end %>
