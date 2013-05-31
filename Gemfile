@@ -75,6 +75,9 @@ gem 'redis'
 
 # Gem for websockets https://github.com/ngauthier/tubesock
 # gem 'tubesock'
+#
+# https://github.com/ngauthier/tubesock-example/blob/master/app/assets/javascripts/chat.coffee
+# https://github.com/ngauthier/tubesock-example/blob/master/app/controllers/chat_controller.rb
 
 # Gem for gamification https://github.com/tute/merit
 # gem 'merit'
