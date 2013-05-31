@@ -1,0 +1,23 @@
+<section ng-controller="HomeDashboardCtrl">
+  <%= simple_form_for(Post.new, html: { id: 'new-post'}) do |f| %>
+    <%= f.error_notification %>
+
+    <div class="form-inputs">
+      <%= f.input :headline, placeholder: 'Headliner' %>
+      <%= f.input :body, placeholder: 'Body' %>
+    </div>
+
+    <div class="form-actions">
+      <%= f.button :submit, 'Post' %>
+    </div>
+  <% end %>
+
+  <h1>{{ notification  }}</h1>
+
+  <section id="activity-feed">
+    <div ng-repeat="post in activityFeed">
+      <div ng-click="sendLike(post.slug)">Like</div>
+      <a href="/posts/{{ post.slug }}"><h2>{{ post.headline }}</h2></a>
+    </div>
+  </section>
+</section>

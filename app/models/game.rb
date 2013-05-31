@@ -5,7 +5,7 @@ class Game
 
   field :title, type: String
   field :publish_date, type: DateTime
-  field :url, type: String
+  field :slug, type: String
   field :gbd_id, type: Integer
   field :overview, type: String
   field :esrb, type: String
@@ -18,9 +18,9 @@ class Game
   field :youtube_video, type: String
   field :genres, type: String
 
-  validates_presence_of :title
-  validates_uniqueness_of :title
-  before_save :generate_url
+  validates :title, uniqueness: true, presence: true
+  validates :slug, uniqueness: true, presence: true
+  before_validation :generate_slug
   has_and_belongs_to_many :platforms
 
   search_in :title
@@ -29,8 +29,12 @@ class Game
     title
   end
 
-  def generate_url
-    self.url = self.title.gsub(/\s+/, "").downcase
+  def to_param
+    slug
+  end
+
+  def generate_slug
+    self.slug ||= self.title.parameterize
   end
 
   def self.add_game(game)

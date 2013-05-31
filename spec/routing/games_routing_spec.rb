@@ -4,7 +4,7 @@ describe GamesController do
   describe "routing" do
 
     it "routes to #show" do
-      get("/game/Zelda").should route_to("games#show", :title => "Zelda")
+      get("/game/zelda").should route_to("games#show", :slug => "zelda")
     end
 
   end

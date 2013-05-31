@@ -18,19 +18,18 @@ class Identity
 
   index({ uid: 1, provider: 1 }, { unique: true })
 
-
   def self.from_omniauth(auth)
-    identity = where(auth.slice(:provider, :uid)).first_or_create do |identity|
-      identity.provider     = auth.provider
-      identity.uid          = auth.uid
-      identity.token        = auth.credentials.token
-      identity.secret       = auth.credentials.secret if auth.credentials.secret
-      identity.expires_at   = auth.credentials.expires_at if auth.credentials.expires_at
-      identity.email        = auth.info.email if auth.info.email
-      identity.image        = auth.info.image if auth.info.image
-      identity.nickname     = auth.info.nickname
-      identity.first_name   = auth.info.first_name
-      identity.last_name    = auth.info.last_name
+    identity = where(auth.slice(:provider, :uid)).first_or_create do |i|
+      i.provider     = auth.provider
+      i.uid          = auth.uid
+      i.token        = auth.credentials.token
+      i.secret       = auth.credentials.secret if auth.credentials.secret
+      i.expires_at   = auth.credentials.expires_at if auth.credentials.expires_at
+      i.email        = auth.info.email if auth.info.email
+      i.image        = auth.info.image if auth.info.image
+      i.nickname     = auth.info.nickname
+      i.first_name   = auth.info.first_name
+      i.last_name    = auth.info.last_name
     end
     identity.save!
 
@@ -40,6 +39,13 @@ class Identity
     identity
   end
 
+  def full_name
+    "#{first_name} #{last_name}"
+  end
+
+  def name
+    "#{first_name.capitalize} #{last_name[0].upcase}."
+  end
 
   def find_or_create_user(current_user)
     if current_user && self.user == current_user
@@ -49,11 +55,10 @@ class Identity
       # User logged in and the identity is not associated with the current user
       # so lets associate the identity and update missing info
       self.user = current_user
-      self.user.email       ||= self.email
-      self.user.image       ||= self.image
-      self.user.first_name  ||= self.first_name
-      self.user.last_name   ||= self.last_name
-      self.user.skip_reconfirmation!
+      self.user.email       = self.email
+      self.user.avatar      = self.image
+      self.user.first_name  = self.first_name
+      self.user.last_name   = self.last_name
       self.user.save!
       self.save!
       return self.user
@@ -65,10 +70,9 @@ class Identity
       # No user associated with the identity so we need to create a new one
       self.build_user(
         email: self.email,
-        image: self.image,
+        avatar: self.image,
         first_name: self.first_name,
-        last_name: self.last_name,
-        roles: [AppConfig.default_role]
+        last_name: self.last_name
       )
       self.user.save!(validate: false)
       self.save!
@@ -76,7 +80,4 @@ class Identity
     end
   end
 
-  def create_user
-
-  end
 end

@@ -5,6 +5,10 @@
 # files.
 
 require 'cucumber/rails'
+require 'capybara/poltergeist'
+require 'simplecov'
+
+include Warden::Test::Helpers 
 
 # Capybara defaults to XPath selectors rather than Webrat's default of CSS3. In
 # order to ease the transition to Capybara we set the default here. If you'd
@@ -37,6 +41,13 @@ rescue NameError
   raise "You need to add database_cleaner to your Gemfile (in the :test group) if you wish to use it."
 end
 
+Before do
+end
+
+After do
+  Warden.test_reset!
+end
+
 # You may also want to configure DatabaseCleaner to use different strategies for certain features and scenarios.
 # See the DatabaseCleaner documentation for details. Example:
 #
@@ -57,3 +68,17 @@ end
 # See https://github.com/cucumber/cucumber-rails/blob/master/features/choose_javascript_database_strategy.feature
 Cucumber::Rails::Database.javascript_strategy = :truncation
 
+Capybara.server do |app, port|
+  Puma::Server.new(app).tap do |s|
+    s.add_tcp_listener '127.0.0.1', port
+  end.run.join
+end
+
+Capybara.register_driver :poltergeist do |app|
+  Capybara::Poltergeist::Driver.new(app, js_errors: false)
+end
+
+
+Capybara.javascript_driver = :poltergeist
+
+SimpleCov.start 'rails'

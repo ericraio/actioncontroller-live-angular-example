@@ -5,7 +5,7 @@ describe GamesController do
     GamesController.superclass.should == ApplicationController
   end
 
-  let(:valid_attributes) { { "url" => "Zelda", "title" => "Zelda" } }
+  let(:valid_attributes) { { "slug" => "Zelda", "title" => "Zelda" } }
 
   let(:valid_session) { {} }
 
@@ -16,15 +16,15 @@ describe GamesController do
     describe "before filters"do
       it "should get the set_game before filter" do
         controller.should_receive(:set_game)
-        get :show, {:title => @game.url}, valid_session
+        get :show, {:slug => @game.slug }, valid_session
       end
       it "should call the before filters in order" do
         controller.should_receive(:set_game).ordered
-        get :show, {:title => @game.url}, valid_session
+        get :show, {:slug => @game.slug }, valid_session
       end
     end
     it "assigns the requested game as @game" do
-      get :show, {:title => @game.url}, valid_session
+      get :show, {:slug => @game.slug }, valid_session
       assigns(:game).should eq(@game)
     end
   end

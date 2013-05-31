@@ -1,0 +1,9 @@
+<%= form_tag user_profile_update_path, :multipart => true do %>
+  <%= file_field_tag :avatar %>
+  <%= submit_tag "Upload Avatar" %>
+<% end %>
+
+<%= form_tag user_profile_update_path, :multipart => true do %>
+  <%= file_field_tag :cover_photo %>
+  <%= submit_tag "Upload Cover Photo" %>
+<% end %>

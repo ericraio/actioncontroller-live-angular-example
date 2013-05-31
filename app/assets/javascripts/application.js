@@ -10,8 +10,20 @@
 // WARNING: THE FIRST BLANK LINE MARKS THE END OF WHAT'S TO BE PROCESSED, ANY BLANK LINE SHOULD
 // GO AFTER THE REQUIRES BELOW.
 //
+//= require jquery
+//= require jquery_ujs
 //= require angular
-//= require angular-bootstrap
 //= require angular-resource
 //= require turbolinks
+//= require_self
 //= require_tree .
+//
+
+app = angular.module("app", [
+  "ngResource"
+]);
+
+$(document).on('ready page:load', function() {
+  angular.bootstrap(document, ['app']);
+});
+

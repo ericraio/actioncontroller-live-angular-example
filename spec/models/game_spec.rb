@@ -13,7 +13,7 @@ describe Game do
   it { should be_mongoid_document }
   it { should be_timestamped_document }
   it { should have_field(:title).of_type(String) }
-  it { should have_field(:url).of_type(String) }
+  it { should have_field(:slug).of_type(String) }
   it { should have_field(:gbd_id).of_type(Integer) }
   it { should have_field(:overview).of_type(String) }
   it { should have_field(:esrb).of_type(String) }
@@ -27,7 +27,9 @@ describe Game do
   it { should have_field(:genres).of_type(String) }
   it { should have_and_belong_to_many(:platforms) }
   it { should validate_presence_of(:title) }
+  it { should validate_presence_of(:slug) }
   it { should validate_uniqueness_of(:title) }
+  it { should validate_uniqueness_of(:slug) }
 
   it "should include the module Mongoid::Search" do
     Game.included_modules.should include(Mongoid::Search)
@@ -39,17 +41,21 @@ describe Game do
     end
   end
 
-  describe "#generate_url" do
-    it "should set the url to from the title but with out whitespace and lowercase the url" do
-      game = Game.new(title: 'World of Warcraft')
-      game.generate_url
-      game.url.should == 'worldofwarcraft'
+  describe "#to_param" do
+    it "should return the slug" do
+      game = Game.create(title: 'World of Warcraft')
+      game.to_param.should == 'world-of-warcraft'
     end
   end
 
-  describe "search_in" do
-    pending
-    #it { Game.received_message?(:search_in).should be_true }
+  describe "#generate_slug" do
+    it "should set the url to from the title but with out whitespace and lowercase the url and be memoized" do
+      game = Game.new
+      game.should_receive(:title).once.and_return('World of Warcraft')
+      game.generate_slug
+      game.generate_slug
+      game.slug.should == 'world-of-warcraft'
+    end
   end
 
   describe "#self.add_game(game)" do

@@ -29,5 +29,6 @@ module BootstrapApp
     config.autoload_paths += %W(#{config.root}/lib)
     config.autoload_paths += Dir["#{config.root}/lib/**/"]
     config.sass.load_paths << File.expand_path('../../lib/assets/stylesheets/')
+    config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)
   end
 end

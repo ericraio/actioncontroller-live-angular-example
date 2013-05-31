@@ -38,23 +38,6 @@ module User::AuthDefinitions
     index({ email: 1 }, { unique: true, background: true })
 
 
-    # Password not required when using omniauth
-    def password_required?
-      super && identities.empty?
-    end
-
-    # Confirmation not required when using omniauth
-    def confirmation_required?
-      super && identities.empty?
-    end
-
-    def update_with_password(params, *options)
-      if encrypted_password.blank?
-        update_attributes(params, *options)
-      else
-        super
-      end
-    end
 
   end
 end

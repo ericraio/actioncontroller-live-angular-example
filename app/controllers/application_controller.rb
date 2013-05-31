@@ -1,25 +1,27 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
-  before_filter :check_registration
   before_filter :configure_permitted_parameters, if: :devise_controller?
+  before_filter :set_gon_env
+  after_filter  :set_csrf_cookie_for_ng
 
-  rescue_from CanCan::AccessDenied do |exception|
-    redirect_to root_path, :alert => exception.message
+  def set_gon_env
+    gon.env = Rails.env
   end
 
-  protected
 
   def configure_permitted_parameters
     devise_parameter_sanitizer.for(:sign_in) { |u| u.permit(:email, :password, :remember_me) }
   end
 
-  private
-
-  def check_registration
-    if current_user && !current_user.valid?
-      flash[:warning] = "Please finish your #{view_context.link_to "registration", edit_user_registration_url }  before continuing.".html_safe
-    end
+  # AngularJS automatically sends CSRF token as a header called X-XSRF
+  # this makes sure rails gets it
+  def verified_request?
+    !protect_against_forgery? || request.get? ||
+      form_authenticity_token == params[request_forgery_protection_token] ||
+      form_authenticity_token == request.headers['X-XSRF-Token']
   end
 
-
+  def set_csrf_cookie_for_ng
+    cookies['XSRF-TOKEN'] = form_authenticity_token if protect_against_forgery?
+  end
 end

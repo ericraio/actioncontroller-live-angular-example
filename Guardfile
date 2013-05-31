@@ -78,3 +78,10 @@ guard 'redis'
 # guard 'redis', :executable => 'redis-server', :pidfile => 'tmp/pids/redis.pid', :port => 6379, :reload_on_change => true do
 #   watch(/^(app|lib|config)\/.*\.rb$/)
 # end
+
+#guard :jasmine, server_env: :test do
+  #watch(%r{spec/javascripts/spec\.(js\.coffee|js|coffee)$}) { 'spec/javascripts' }
+  #watch(%r{spec/javascripts/.+_spec\.(js\.coffee|js|coffee)$})
+  #watch(%r{spec/javascripts/fixtures/.+$})
+  #watch(%r{app/assets/javascripts/(.+?)\.(js\.coffee|js|coffee)(?:\.\w+)*$}) { |m| "spec/javascripts/#{ m[1] }_spec.#{ m[2] }" }
+#end

@@ -1,0 +1,24 @@
+<header class="navbar navbar-fixed-top">
+  <div class="navbar-inner">
+    <div class="container-fluid">
+      <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </a>
+      <%= link_to "GAME SITE", root_path, :class => 'brand' %>
+      <input type="text" class="input-large search-query pull-left" placeholder="Search">
+      <ul class="nav pull-right">
+        <% if user_signed_in? %>
+          <li><%= link_to 'Edit account', edit_user_registration_path, method: 'get' %></li>
+          <li><%= link_to 'Sign out', destroy_user_session_path, method: 'delete' %></li>
+        <% else %>
+          <li><%= link_to 'Sign up', new_user_registration_path %></li>
+          <li><%= link_to 'Sign in', user_session_path %></li>
+          <li><%= link_to "Sign in with Facebook", user_omniauth_authorize_path(:facebook) %></li>
+          <li><%= link_to "Sign in with Twitter", user_omniauth_authorize_path(:twitter) %></li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+</header>

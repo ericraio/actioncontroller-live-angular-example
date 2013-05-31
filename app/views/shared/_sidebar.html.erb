@@ -1,0 +1,13 @@
+<aside class="span3">
+  <div class="well sidebar-nav">
+    <h3><%= current_user.username %></h3>
+    <span><%= link_to "Edit Profile", user_profile_edit_path %></span>
+    <ul class="nav nav-list">
+      <li class="nav-header">Sidebar</li>
+      <!-- sidebar menu models -->
+      <li><%= link_to "Link1", "/path1"  %></li>
+      <li><%= link_to "Link2", "/path2"  %></li>
+      <li><%= link_to "Link3", "/path3"  %></li>
+    </ul>
+  </div><!--/.well -->
+</aside>
